@@ -1,18 +1,31 @@
 
 
-###Edit config.php
+### Edit config.php
+```
 sudo docker run -it --rm --volume nextcloud_aio_nextcloud:/var/www/html:rw alpine sh -c "apk add --no-cache nano && nano /var/www/html/config/config.php"
-
-###Config network
+```
+### Config network
+```
 sudo nano /etc/dnsmasq.conf
+```
+Hoặc
+```
 sudo nano /etc/hosts
-
-###Nếu lỗi k thể truy cập trong mạng nội bộ (Nat Loopback) thì edit file daemon.json trong docker
+```
+### Nếu lỗi k thể truy cập trong mạng nội bộ (Nat Loopback) thì edit file daemon.json trong docker
+Lưu ý: nếu k tìm thấy file daemon.json trong /etc/docker/ thì hãy tạo mới
+```
 {
   "dns": ["<ip router DNS nội bộ>","8.8.8.8", "8.8.4.4"]
 }
+```
+Sau đó restart lại service docker
+```
+sudo systemctl restart docker
+```
 
 ### Chạy lệnh này để run mastercontainer với dns 8.8.8.8
+```
 sudo docker run \
 --init \
 --sig-proxy=false \
@@ -28,3 +41,4 @@ sudo docker run \
 --volume nextcloud_aio_mastercontainer:/mnt/docker-aio-config \
 --volume /var/run/docker.sock:/var/run/docker.sock:ro \
 ghcr.io/nextcloud-releases/all-in-one:latest
+```
